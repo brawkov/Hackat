@@ -1,3 +1,6 @@
+from pandas.io import pickle
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 
@@ -5,7 +8,7 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
+from sklearn.svm import SVC, LinearSVC
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn import tree
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -14,6 +17,17 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import CountVectorizer
 import pandas as pd
 
+
+def save_model(classifier):
+    with open('text_classifier.model', 'wb') as picklefile:
+        pickle.dump(classifier, picklefile)
+
+def open_model():
+    with open('text_classifier.model', 'rb') as training_model:
+        return pickle.load(training_model)
+
+def learning_model():
+    pass
 
 def test_m():
     df = pd.read_csv('..\\data\\train_data.csv', encoding='utf-8')
@@ -38,15 +52,25 @@ def test_m():
 
     result = {}
     for tag in ['Объектные', 'Функциональные', 'Процессные', 'Ограничения', 'Структурные']:
+        # Для первого варианта(дерева)
+        # X_train, X_test, y_train, y_test = train_test_split(df['Документ'], df[tag].values,
+        #                                                     test_size=0.71, random_state=0)
         X_train, X_test, y_train, y_test = train_test_split(df['Документ'], df[tag].values,
-                                                            random_state=0)
+                                                            test_size=0.615, random_state=0)
         count_vect = CountVectorizer()
         X_train_counts = count_vect.fit_transform(X_train)
         tfidf_transformer = TfidfTransformer()
         X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
-        # clf = MultinomialNB().fit(X_train_tfidf, y_train)
-        clf = tree.DecisionTreeClassifier()
+
+        #Первый вариант
+        #Отличаются значения при каждом обучение на 200-300шт
+        # clf = tree.DecisionTreeClassifier()
+        clf = LinearSVC()
+        # clf = RandomForestClassifier(n_estimators=90, random_state=0)
         clf = clf.fit(X_train_tfidf, y_train)
+        res_pred = clf.predict(count_vect.transform(X_test))
+        score = accuracy_score(y_test, res_pred)
+        print(score)
         temp_result = []
         for data in test_data[['Документ']].values:
             temp_result.extend(clf.predict(count_vect.transform(data)))
