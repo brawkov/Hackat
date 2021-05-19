@@ -1,6 +1,7 @@
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 
+import pandas as pd
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
@@ -12,10 +13,13 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import csv
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import CountVectorizer
+from io import StringIO
 import pandas as pd
 
 
 def test_m():
+    # parse_train = parse_csv("../data/train_data.csv")
+
     df = pd.read_csv('..\\data\\train_data.csv', encoding='utf-8')
     df.head()
     col = ['Документ', 'Объектные', 'Функциональные', 'Процессные', 'Ограничения', 'Структурные']
@@ -100,6 +104,7 @@ def test_m():
     #
     # print("Обучение")
 
+
     # Y = ["test_1"]
     # clf = MultinomialNB().fit(vector.shape,)
     # docs_new = ['God is love', 'OpenGL on the GPU is fast']
@@ -108,6 +113,7 @@ def test_m():
     # X_new_tfidf = vector.transform(X_new_counts)
     # r = clf.predict(X_new_tfidf)
     # print(r)
+
 
     # print("Обучение")
     # X = [[0, 0], [1, 1]]
