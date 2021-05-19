@@ -68,7 +68,7 @@ def test_m():
     print()
     res.to_csv('..\\data\\submission.csv',
                header=['id,file_id,Объектные,Функциональные,Процессные,Ограничения,Структурные'],
-               sep="\t", encoding='utf-8', quoting=csv.QUOTE_NONE, escapechar="",index=False)
+               sep="\t", encoding='utf-8', quoting=csv.QUOTE_NONE, escapechar="", index=False)
 
     # # list of text documents
     # text = ["The quick brown fox jumped over the lazy dog."]
